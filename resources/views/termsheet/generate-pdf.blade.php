@@ -24,10 +24,10 @@
 		<div style="margin-top:5px; font-size: smaller;">
 			<a href="https://lendingfusiongroup.com/" style="text-decoration: none; color: inherit;">https://lendingfusiongroup.com/</a>
 		</div>
-		<div style="margin-top:5px;">
+		<div style="margin-top:15px;">
 			<b>Official Conditional Approval</b>
 		</div>
-		<div style="margin-top:5px;">
+		<div style="margin-top:15px;">
 			<b>Date: </b><span style="font-family: 'Times New Roman';">{{now()->format('m/d/Y')}}</span>
 		</div>
 		<div style="margin-top:5px;">
@@ -39,7 +39,7 @@
 		<div style="margin-top:5px;">
 			<b>Address: </b><span style="font-family: 'Times New Roman'; text-transform: uppercase;">{{$data['address']}}</span>
 		</div>
-		<div style="margin-top:5px;">
+		<div style="margin-top:15px;">
 			<span style="font-family: 'Times New Roman';">(Expected Loan described as follows):</span>
 		</div>
 		<div style="margin-top:5px;">
@@ -70,24 +70,28 @@
 			<b>Verified applicant's Income </b><span style="font-family: 'Times New Roman';"> <u>X</u> Yes O No</span>
 		</div>
 		<div style="margin-top:5px;">
-			<span style="font-family: 'Times New Roman';">Verified applicant's Business Credit: __Yes X No</span>
+			<span style="font-family: 'Times New Roman';"><b>Verified applicant's Business Credit:</b> __Yes X No</span>
 		</div>
 		<div style="margin-top:5px;">
-		<span style="font-family: 'Times New Roman';">Reviewed applicant's debts and other assets X Yes _No _ Not applicable</span>
+			<span style="font-family: 'Times New Roman';"><b>Reviewed applicant's debts and other assets:</b> X Yes _No _ Not applicable</span>
 		</div>
 		<div style="margin-top:5px;">
-			<span style="font-family: 'Times New Roman';">The subject business condition meets the lenders requirements. : <u>X</u> Yes O No</span>
+			<span style="font-family: 'Times New Roman';"><b>The subject business condition meets the lenders requirements. :</b> <u>X</u> Yes O No</span>
 		</div>
 		<div style="margin-top:25px;">
-		<span style="font-family: 'Times New Roman';">*Applicant is pre-approved for the loan provided that the applicant's creditworthiness and
-			financial position does not materially change and provided that:</span>
+			<span style="font-family: 'Times New Roman';">*Once the applicant has made two MCA payments, the loan will transition directly into a term loan, with the option to
+			convert it into a line of credit if desired.</span>
+		</div>
+		<div style="margin-top:5px;">
+			<span style="font-family: 'Times New Roman';">*Applicant is pre-approved for the loan provided that the applicant's creditworthiness and
+				financial position does not materially change and provided that:</span>
 		</div>
 		<div style="margin-top:20px;">
 			<b>Documents Needed: </b><br>
 			<span style="margin-left:50px; font-family: 'Times New Roman';">1) AR and AP</span><br>
 			<span style="margin-left:50px; font-family: 'Times New Roman';">2) MCA contract with Two verified payments</span>
 		</div>
-		<div style="margin-top:5px;">
+		<div style="margin-top:10px;">
 			<span style="font-family: 'Times New Roman';">Expedited Funding Date Before: {{ now()->addDays(45)->format('m/d/Y') }}</span>
 		</div>
 		<div style="margin-top:10px;">

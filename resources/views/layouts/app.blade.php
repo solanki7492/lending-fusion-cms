@@ -1,72 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laravel App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .main-wrapper {
-            flex: 1;
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            border-right: 1px solid #dee2e6;
-            min-height: 100vh;
-        }
-        .sidebar a {
-            padding: 10px 20px;
-            display: block;
-            color: #333;
-            text-decoration: none;
-        }
-        .sidebar a:hover,
-        .sidebar a.active {
-            background-color: #e9ecef;
-            font-weight: bold;
-        }
-        .content {
-            flex: 1;
-            padding: 30px;
-        }
-    </style>
-</head>
-<body>
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{{env('APP_NAME')}}</title>
+    <link rel="manifest" href="assets/favicon/manifest.json">
+    
+    <link rel="stylesheet" href="/css/simplebar.css">
+    <link rel="stylesheet" href="css/vendors/simplebar.css">
+    
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/free.min.css" rel="stylesheet">
 
-    <!-- Header -->
-    <nav class="navbar navbar-dark bg-dark px-4">
-        <a class="navbar-brand" href="#">My App</a>
-    </nav>
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="https://unpkg.com/@coreui/icons@2.0.1/css/all.min.css" rel="stylesheet">
 
-    <!-- Main Section -->
-    <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            @if(Auth::check())
-                <a href="{{ route('termsheet') }}">Termsheet</a>
-                <a href="#">
-                    <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Logout</button>
-                </a>
-            </form>
-        @endif
-        </aside>
-
-        <!-- Main Content -->
-        <div class="content">
-            @yield('content')
-        </div>
+    <script src="/js/config.js"></script>
+    <script src="/js/color-modes.js"></script>
+  </head>
+  <body>
+    @if(Auth::check())
+        @include('layouts.sidebar')
+    @endif
+    <div class="wrapper d-flex flex-column min-vh-100">
+      @if(Auth::check())
+          @include('layouts.header')
+      @endif
+      <div class="body flex-grow-1">
+          <div class="container-lg px-4">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card-body">
+                    @yield('content')
+                  </div>
+              </div>
+          </div>
+          </div>
+      </div>
+      @if(Auth::check())
+          @include('layouts.footer')
+      @endif
     </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="/js/coreui.bundle.min.js"></script>
+    <script src="/js/simplebar.min.js"></script>
+    <script src="https://unpkg.com/@coreui/icons@2.0.1/js/coreui-icons.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script>
+      const header = document.querySelector('header.header');
+
+      document.addEventListener('scroll', () => {
+        if (header) {
+          header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+        }
+      });
+    </script>
+    <script src="/js/main.js"></script>
+    <script>
+    </script>
+
+  </body>
 </html>

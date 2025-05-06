@@ -6,12 +6,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Termsheet;
-
+use Illuminate\Support\Facades\Http;
+use App\Models\TermsheetEmail;
 class TermsheetController extends Controller
 {
     public function index()
     {
-        $termsheets = Termsheet::all();
+        $termsheets = Termsheet::with('emails','user')->latest()->paginate(10);
         return view('termsheet.list', compact('termsheets'));
     }
     public function create()
@@ -21,12 +22,23 @@ class TermsheetController extends Controller
 
     public function getGeneratePDF(Request $request)
     {
+        $request->validate([
+            'merchant_name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'address' => 'required',
+            'email.*' => 'required|email',
+            'loan_amount' => 'required|numeric',
+        ]);
+        
         $data = $request->all();
         $pdf = DomPDF::loadView('termsheet.generate-pdf', compact( 'data'));
 
         $fileName = Str::slug($request->merchant_name, '-').'-contract' . time() . '.pdf';
+        $filePath = "termsheets/{$fileName}";
+        Storage::disk('public')->put($filePath, $pdf->output());
 
-        return $pdf->stream($fileName);
+        return response()->json(asset('storage/' . $filePath));
     }
     public function store(Request $request)
     {
@@ -39,14 +51,14 @@ class TermsheetController extends Controller
         $filePath = "termsheets/{$fileName}";
         $merchantName = Str::slug($request->merchant_name , '-');
         // Store PDF in storage folder
-        Storage::disk('local')->put($filePath, $pdfContent);
+        Storage::disk('public')->put($filePath, $pdfContent);
 
         $termsheet = new Termsheet();
+        $termsheet->user_id = auth()->user()->id;
         $termsheet->merchant_name = $request->merchant_name;
         $termsheet->first_name = $request->first_name;
         $termsheet->last_name = $request->last_name;
         $termsheet->address = $request->address;
-        $termsheet->sent_to = $request->email;
         $termsheet->termsheet = $filePath;
         $termsheet->loan_amount = $request->loan_amount;
         $termsheet->origination_fee = $request->origination_fee;
@@ -61,10 +73,32 @@ class TermsheetController extends Controller
         $termsheet->email_sent_at = null;
         $termsheet->save();
 
+        foreach ($request->email as $email) {
+            TermsheetEmail::create([
+                'termsheet_id' => $termsheet->id,
+                'email' => $email,
+            ]);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Termsheet created successfully',
             'termsheet' => $termsheet,
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $response = Http::withHeaders([
+            'X-API-TOKEN' => 'f47108b2-6a55-429e-a230-7f369f06bf21',
+        ])->get('https://smsblastcrm.com/api/leads/search', [
+            'term' => $request->term,
+        ]);
+        if ($response->successful()) {
+            $leads = $response->json();
+        } else {
+            $leads = [];
+        }
+        return response()->json($leads);
     }
 }

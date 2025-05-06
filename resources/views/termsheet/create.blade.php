@@ -3,99 +3,108 @@
 @section('content')
     <h2 class="mb-4">Create Termsheet</h2>
 
-    <form id="generatePdfForm" action="{{ route('termsheet.generate.pdf') }}" method="POST">
+    <form id="generatePdfForm" action="{{ route('termsheet.generate.pdf') }}"  method="POST">
         @csrf
         <div class="row">
             <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="address">Merchant Name</label>
-                <input type="text" class="form-control" name="merchant_name" id="merchant-name">
-            </div>
-            </div>
-            <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="address">First Name:</label>
-                <input type="text" class="form-control" name="first_name" id="first-name">
-            </div>
-            </div>
-            <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="address">Last Name:</label>
-                <input type="text" class="form-control" name="last_name" id="last-name">
-            </div>
+                <div class="mb-1">
+                    <label class="form-label" for="merchant-name">Merchant Name</label>
+                    <select class="form-select" name="merchant_name" id="merchant-name">
+                        <option value="" selected disabled>Select Merchant</option>
+                        <option value="Merchant 1">Merchant 1</option>
+                        <option value="Merchant 2">Merchant 2</option>
+                    </select>
+                    <span class="text-danger" id="merchant-name-error"></span>
+                </div>
             </div>
             <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="address">Address:</label>
-                <input type="text" class="form-control" name="address" id="address">
+                <div class="mb-1">
+                    <label class="form-label" for="address">First Name:</label>
+                    <input type="text" class="form-control" name="first_name" id="first-name">
+                    <span class="text-danger" id="first-name-error"></span>
+                </div>
             </div>
+            <div class="col-md-6 col-6">
+                <div class="mb-1">
+                    <label class="form-label" for="address">Last Name:</label>
+                    <input type="text" class="form-control" name="last_name" id="last-name">
+                    <span class="text-danger" id="last-name-error"></span>
+                </div>
+            </div>
+            <div class="col-md-6 col-6">
+                <div class="mb-1">
+                    <label class="form-label" for="address">Address:</label>
+                    <input type="text" class="form-control" name="address" id="address">
+                </div>
             </div>
             <div class="col-md-6 col-6 lead-email">
-            <div class="mb-1">
-            <label class="form-label" for="to">Email</label>
-            <input type="email" class="form-control" name="email" id="email">
-            </div>
-            </div>
-            <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="loan-amount">Loan Amount:</label>
-                <input type="text" class="form-control" name="loan_amount" id="loan-amount">
-            </div>
+                <div class="mb-1">
+                    <label class="form-label" for="to">Email</label>
+                    <select class="form-control" name="email[]" id="email" multiple></select>
+                    <span class="text-danger" id="email-error"></span>
+                </div>
             </div>
             <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="origination-fee">Origination Fee:</label>
-                <input type="text" class="form-control" name="origination_fee" id="origination-fee-amount" value="1">
-            </div>
-            </div>
-            <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="net-loan-amount">Net Loan Amount:</label>
-                <input type="text" class="form-control" name="net_loan_amount" id="net-loan-amount">
-            </div>
+                <div class="mb-1">
+                    <label class="form-label" for="loan-amount">Loan Amount:</label>
+                    <input type="text" class="form-control" name="loan_amount" id="loan-amount">
+                    <span class="text-danger" id="loan-amount-error"></span>
+                </div>
             </div>
             <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="monthly-payment">Monthly Payment:</label>
-                <input type="text" class="form-control" name="monthly_payment" id="monthly-payment">
-            </div>
+                <div class="mb-1">
+                    <label class="form-label" for="origination-fee">Origination Fee:</label>
+                    <input type="text" class="form-control" name="origination_fee" id="origination-fee-amount" value="1">
+                </div>
             </div>
             <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="interest-rate">Interest Rate:</label>
-                <input type="text" class="form-control" name="interest_rate" id="interest-rate" value="6">
+                <div class="mb-1">
+                    <label class="form-label" for="net-loan-amount">Net Loan Amount:</label>
+                    <input type="text" class="form-control" name="net_loan_amount" id="net-loan-amount">
+                </div>
             </div>
+            <div class="col-md-6 col-6">
+                <div class="mb-1">
+                    <label class="form-label" for="monthly-payment">Monthly Payment:</label>
+                    <input type="text" class="form-control" name="monthly_payment" id="monthly-payment">
+                </div>
+            </div>
+            <div class="col-md-6 col-6">
+                <div class="mb-1">
+                    <label class="form-label" for="interest-rate">Interest Rate:</label>
+                    <input type="text" class="form-control" name="interest_rate" id="interest-rate" value="12">
+                </div>
             </div>
             <div class="col-md-6 col-6">
             <div class="mb-1">
                 <label class="form-label" for="loan-type-program-type">Loan Type and Program Type:</label>
                 <select class="form-select" name="loan_type_program_type" id="loan-type-program">
-                <option value="Traditional" selected>Traditional</option>
-                <option value="Line of Credit Revolving">Line of Credit Revolving</option>
+                    <option value="Traditional" selected>Traditional</option>
+                    <option value="Line of Credit Revolving">Line of Credit Revolving</option>
                 </select>
             </div>
             </div>
             <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="loan-type-program">Loan Type and Program Year:</label>
-                <input type="text" class="form-control" name="loan_type_program" id="loan-type-program" value="7" min="1" max="90">
-            </div>
-            </div>
-            <div class="col-md-6 col-6">
-            <div class="mb-1 mt-1">
-                <label class="form-label" for="additional-financing-available">Additional Financing Available:</label>
-                <input type="text" class="form-control" name="additional_financing_available" id="additional-financing-available">
-            </div>
+                <div class="mb-1">
+                    <label class="form-label" for="loan-type-program">Loan Type and Program Year:</label>
+                    <input type="text" class="form-control" name="loan_type_program" id="loan-type-program" value="7" min="1" max="90">
+                </div>
             </div>
             <div class="col-md-6 col-6">
-            <div class="mb-1 mt-1">
-                <label class="form-label" for="loan-type-program">Notes:</label>
-                <input type="text" class="form-control" name="notes" id="notes" >
+                <div class="mb-1 mt-1">
+                    <label class="form-label" for="additional-financing-available">Additional Financing Available:</label>
+                    <input type="text" class="form-control" name="additional_financing_available" id="additional-financing-available">
+                </div>
             </div>
+            <div class="col-md-6 col-6">
+                <div class="mb-1 mt-1">
+                    <label class="form-label" for="loan-type-program">Notes:</label>
+                    <input type="text" class="form-control" name="notes" id="notes" >
+                </div>
             </div>
         </div>
         <div class="col-12">
-            <button type="submit" class="btn btn-primary mt-3" onclick="setPreviewMode()">Submit</button>
+            <button  class="btn btn-primary mt-3" onclick="setPreviewMode()">Submit</button>
         </div>
     </form>
     
@@ -104,21 +113,104 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">PDF Preview</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close close-preview-pdf" data-bs-dismiss="pdfPreviewModal"></button>
                 </div>
                 <div class="modal-body">
                     <iframe name="pdf-frame" id="pdf-frame" width="100%" height="600px" style="display: none; border: none;"></iframe>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary close-preview-pdf" data-bs-dismiss="modal">Close</button>
                     <button class="btn btn-primary savePdf">Submit</button>
                 </div>
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
     <script type="text/javascript">
+        var leads = [];
+        $('#merchant-name').select2({
+            placeholder: "Select Merchant",
+            allowClear: true,
+            ajax: {
+                url: '{{ route("lead.search") }}',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        term: params.term
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.data.map(function(merchant) {
+                            leads.push(merchant);
+                            return {
+                                id: merchant.merchant_name, // required
+                                text: merchant.merchant_name, // required
+                                'emails': merchant.emails,
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+        
+        $('#email').select2({
+            placeholder: "Select Email",
+            allowClear: true,
+            tags: true, // Allow adding new email addresses
+            tokenSeparators: [',', ' '], // Separate emails by comma or space
+            createTag: function(params) { 
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailRegex.test(params.term)) {
+                    return {
+                        id: params.term,
+                        text: params.term,
+                        newTag: true,
+                    };
+                }
+                return null;
+            }
+        });
+
+        $('#merchant-name').on('select2:select', function(e) {
+            const selected = e.params.data;
+            const selectedLead = leads.find(lead => lead.merchant_name == selected.id);
+            if (selectedLead) {
+                $('#first-name').val(selectedLead.first_name || '');
+                $('#last-name').val(selectedLead.last_name || '');
+                $('#address').val(selectedLead.address || '');
+                if (selectedLead.emails && selectedLead.emails.length > 0) {
+                    $('#email').empty(); // clear existing
+
+                    // Optional: Add default placeholder option
+                    $('#email').append(new Option('Select Email', '', false, false));
+
+                    selectedLead.emails.forEach(function(emailObj) {
+                        if (emailObj.email !== 'tmuz@abcelectricalservices.com') { // Exclude this specific email
+                            const option = new Option(emailObj.email, emailObj.email, true, true);
+                            $('#email').append(option);
+                        }
+                    });
+
+                    $('#email').trigger('change'); // refresh Select2 if used
+                } else {
+                    $('#email').empty().append(new Option('No emails found', '', false, false)).trigger('change');
+                }
+                $('#loan-amount').val(selectedLead.contract_amount || '');
+                if (selectedLead.contract_amount) {
+                    updateNetLoanAmount();
+                    calculateMonthlyPayment();
+                } 
+            }
+        });
+        $('.close-preview-pdf').on('click', function() {
+            $('#pdfPreviewModal').modal('hide');
+        });
         function updateNetLoanAmount() {
             var loanAmount = parseFloat($('#loan-amount').val().replace(/,/g, '')) || 0;
             var originationFee = parseFloat($('#origination-fee-amount').val().replace(/,/g, '')) || 0;
@@ -154,21 +246,50 @@
             }
 
             document.getElementById('generatePdfForm').addEventListener('submit', function(e) {
-                if (previewMode) {
-                    $('#pdfPreviewModal').modal('show');
-                    document.getElementById('pdf-frame').style.display = 'block';
-                    this.target = 'pdf-frame'; // Target the iframe to show PDF
-                    // Do not reset previewMode here, so clicking again shows updated preview
-                } else {
-                    this.target = ''; // Default form submission
+                e.preventDefault(); // Prevent default form submission
+                $('#generatePdfForm').find('input.email-indexed').remove();
+
+                const selectedEmails = $('#email').val(); // Array of selected emails
+                if (selectedEmails && selectedEmails.length > 0) {
+                    selectedEmails.forEach((email, index) => {
+                        $('<input>')
+                            .attr('type', 'hidden')
+                            .attr('name', `email[${index}]`)
+                            .attr('value', email)
+                            .addClass('email-indexed')
+                            .appendTo('#generatePdfForm');
+                    });
                 }
+                const form = this;
+                const formData = new FormData(form);
+
+                $.ajax({
+                    url: form.getAttribute('action'), // Use the action attribute from the form
+                    method: form.method,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#pdfPreviewModal').modal('show');
+                        const pdfFrame = document.getElementById('pdf-frame');
+                        pdfFrame.style.display = 'block';
+                        pdfFrame.src = response;
+                    },
+                    error: function(xhr) {
+                        $('#merchant-name-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.merchant_name || '' : '');
+                        $('#first-name-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.first_name || '' : '');
+                        $('#last-name-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.last_name || '' : '');
+                        $('#email-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.email || '' : '');
+                        $('#loan-amount-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.loan_amount || '' : '');
+                        
+                    }
+                });
             });
 
             $(document).on('click', '.savePdf', function() {
                 previewMode = false; // Set to false to allow normal submission
                 const form = document.getElementById('generatePdfForm');
                 const formData = new FormData(form);
-                console.log('Iframe filename:', document.getElementById('pdf-frame').name);
                 $.ajax({
                     url: "{{route('termsheet.store')}}",
                     method: form.method,

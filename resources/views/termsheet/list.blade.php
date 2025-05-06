@@ -1,55 +1,61 @@
 @extends('layouts.app') {{-- Replace with your actual layout --}}
 
 @section('content')
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Termsheet List</h4>
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3>Termsheets</h3>
         <a href="{{ route('termsheet.create') }}" class="btn btn-primary">Create Termsheet</a>
     </div>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Merchant Name</th>
-                    <th>First Name</th>
-                    <th>Last name</th>
-                    <th>Email</th>
-                    <th>loan_amount</th>
-                    <th>origination_fee</th>
-                    <th>net_loan_amount</th>
-                    <th>monthly_payment</th>
-                    <th>interest_rate</th>
-                    <th>status</th>
-                </tr>
+    
+    <div class="tab-pane p-3 active preview">
+        <table class="table  table-striped">
+            <thead>
+            <tr class="align-middle">
+                <th class="col">#</th>
+                <th class="col">FIRST NAME</th>
+                <th class="col">LAST NAME</th>
+                <th class="col">LOAN AMOUNT</th>
+                <th class="col">SEND AT</th>
+                <th class="col" style="width: 35%;">SENT TO</th>
+                <th class="col">SENT BY</th>
+                <th class="col">TERMSHEET</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach($termsheets as $termsheet)
-                    <tr>
-                        <td>{{ $termsheet->id }}</td>
-                        <td>{{ $termsheet->merchant_name }}</td>
-                        <td>{{ $termsheet->first_name }}</td>
-                        <td>{{ $termsheet->last_name }}</td>
-                        <td>{{ $termsheet->sent_to }}</td>
-                        <td>{{ $termsheet->loan_amount }}</td>
-                        <td>{{ $termsheet->origination_fee }}%</td>
-                        <td>{{ $termsheet->net_loan_amount }}</td>
-                        <td>{{ $termsheet->monthly_payment }}</td>
-                        <td>{{ $termsheet->interest_rate }}%</td>
-                        <td>
-                            @if($termsheet->status == 1)
-                                <span class="badge bg-success">Approved</span>
-                            @elseif($termsheet->status == 0)
-                                <span class="badge bg-danger">Declined</span>
-                            @else
-                                <span class="badge bg-warning">Pending</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+            @foreach($termsheets as $termsheet)
+                <tr class="align-middle">
+                    <td>
+                        <div>{{ $termsheet->id }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $termsheet->first_name }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $termsheet->last_name }}</div>
+                    </td>
+                    <td>
+                        <div>{{ number_format( $termsheet->loan_amount) }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $termsheet->created_at }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $termsheet->emails->pluck('email')->join(', ') }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $termsheet->user->name }}</div>
+                    </td>
+                    <td>
+                        <a href="{{ asset('storage/' . $termsheet->termsheet) }}" class="btn btn-link" target="_blank"><i class="icon icon-xxl mb-2 cil-cloud-download"> </i></a>
+                    </td>
+                </tr>
+            @endforeach
+                        
             </tbody>
         </table>
+        <div class="d-flex justify-content-end">
+            {{ $termsheets->links('pagination::bootstrap-4') }}
+        </div>
     </div>
 </div>
-
 @endsection

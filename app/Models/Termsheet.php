@@ -10,6 +10,7 @@ class Termsheet extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'address',
         'merchant_name',
         'first_name',
@@ -28,4 +29,14 @@ class Termsheet extends Model
         'notes',
         'email_sent_at',
     ];
+
+    public function emails()
+    {
+        return $this->hasMany(TermsheetEmail::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

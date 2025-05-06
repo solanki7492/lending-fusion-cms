@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Role;
 
 class LoginController extends Controller
 {
@@ -41,5 +44,34 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+    public function showRegisterForm()
+    {
+        $roles = Role::all();
+        
+        return view('auth.register', compact('roles'));
+    }
+    public function register(Request $request)
+    {
+        // Validate the input
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:8'],
+            'role_id' => ['required', 'exists:roles,id'],
+        ]);
+
+        // Create the user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
+        ]);
+
+        // Log the user in
+        Auth::login($user);
+
+        return redirect('/termsheet'); // Change as needed
     }
 }
