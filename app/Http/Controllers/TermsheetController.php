@@ -8,11 +8,19 @@ use Illuminate\Http\Request;
 use App\Models\Termsheet;
 use Illuminate\Support\Facades\Http;
 use App\Models\TermsheetEmail;
+use App\Models\User;
 class TermsheetController extends Controller
 {
     public function index()
     {
-        $termsheets = Termsheet::with('emails','user')->latest()->paginate(10);
+        $auth = auth()->user();
+
+        if ($auth->role_id === User::ROLE_SALES) {
+            $termsheets = Termsheet::with('emails', 'user')->where('user_id', $auth->id)->latest()->paginate(10);
+        } else {
+            $termsheets = Termsheet::with('emails', 'user')->latest()->paginate(10);
+        }
+
         return view('termsheet.list', compact('termsheets'));
     }
     public function create()
