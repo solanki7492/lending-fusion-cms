@@ -48,10 +48,6 @@
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Login</button>
               </div>
-             
-              <div class="mt-3 text-center">
-                <a href="{{ route('register') }}">Don't have an account? Register</a>
-              </div>
             </form>
           </div>
         </div>
