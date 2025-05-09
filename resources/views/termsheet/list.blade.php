@@ -46,7 +46,7 @@
                         <div>{{ $termsheet->user->name }}</div>
                     </td>
                     <td>
-                        <a href="{{ asset('storage/' . $termsheet->termsheet) }}" class="btn btn-link" target="_blank"><i class="icon icon-xxl mb-2 cil-cloud-download"> </i></a>
+                        <a href="{{ asset('/' . $termsheet->termsheet) }}" class="btn btn-link" target="_blank"><i class="icon icon-xxl mb-2 cil-cloud-download"> </i></a>
                     </td>
                 </tr>
             @endforeach

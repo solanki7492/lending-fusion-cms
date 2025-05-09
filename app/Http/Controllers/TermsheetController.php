@@ -40,26 +40,42 @@ class TermsheetController extends Controller
         ]);
         
         $data = $request->all();
-        $pdf = DomPDF::loadView('termsheet.generate-pdf', compact( 'data'));
-
-        $fileName = Str::slug($request->merchant_name, '-').'-contract' . time() . '.pdf';
-        $filePath = "termsheets/{$fileName}";
-        Storage::disk('public')->put($filePath, $pdf->output());
-
-        return response()->json(asset('storage/' . $filePath));
+        $pdf = DomPDF::loadView('termsheet.generate-pdf', compact('data'));
+        
+        // Generate file name
+        $fileName = Str::slug($request->merchant_name, '-') . '-contract' . time() . '.pdf';
+        
+        // Path under the public folder
+        $publicPath = public_path("termsheets/{$fileName}");
+        
+        // Make sure directory exists
+        if (!file_exists(dirname($publicPath))) {
+            mkdir(dirname($publicPath), 0755, true);
+        }
+        
+        // Save the file directly to public/
+        file_put_contents($publicPath, $pdf->output());
+        
+        // Return URL
+        return response()->json(asset("termsheets/{$fileName}"));
     }
     public function store(Request $request)
     {
         $data = $request->all();
-        $pdf = DomPDF::loadView('termsheet.generate-pdf', compact( 'data'));
+        $pdf = DomPDF::loadView('termsheet.generate-pdf', compact('data'));
 
         $pdfContent = $pdf->output();
-        $fileName = Str::slug($request->merchant_name, '-').'-contract' . time() . '.pdf';
-
+        $fileName = Str::slug($request->merchant_name, '-') . '-contract' . time() . '.pdf';
         $filePath = "termsheets/{$fileName}";
-        $merchantName = Str::slug($request->merchant_name , '-');
-        // Store PDF in storage folder
-        Storage::disk('public')->put($filePath, $pdfContent);
+
+        // Create directory if it doesn't exist
+        $fullPath = public_path($filePath);
+        if (!file_exists(dirname($fullPath))) {
+            mkdir(dirname($fullPath), 0755, true);
+        }
+
+        // Save PDF in public folder
+        file_put_contents($fullPath, $pdfContent);
 
         $termsheet = new Termsheet();
         $termsheet->user_id = auth()->user()->id;

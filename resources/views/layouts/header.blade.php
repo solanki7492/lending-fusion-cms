@@ -8,7 +8,7 @@
           
           <ul class="header-nav">
             <li class="nav-item dropdown"><a class="nav-link py-0 pe-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <div class="avatar avatar-md"><img class="avatar-img" src="https://coreui.io/demos/bootstrap/5.1/free/assets/img/avatars/8.jpg" alt="user@email.com"></div>
+                <div class="avatar avatar-md"><img class="avatar-img" src="/images/avatar.jpg" alt="user@email.com"></div>
               </a>
               <div class="dropdown-menu dropdown-menu-end pt-0">
                 

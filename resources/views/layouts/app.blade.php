@@ -30,13 +30,13 @@
       @endif
       <div class="body flex-grow-1">
           <div class="container-lg px-4">
-          <div class="row">
-              <div class="col-md-12">
-                  <div class="card-body">
-                    @yield('content')
-                  </div>
-              </div>
-          </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card-body">
+                      @yield('content')
+                    </div>
+                </div>
+            </div>
           </div>
       </div>
       @if(Auth::check())
