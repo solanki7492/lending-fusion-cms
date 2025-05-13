@@ -11,12 +11,12 @@
         <table class="table  table-striped">
             <thead>
             <tr class="align-middle">
-                <th class="col">#</th>
+                <th class="col">LEAD NAME</th>
                 <th class="col">FIRST NAME</th>
                 <th class="col">LAST NAME</th>
                 <th class="col">LOAN AMOUNT</th>
                 <th class="col">SEND AT</th>
-                <th class="col" style="width: 35%;">SENT TO</th>
+                <th class="col" style="width: 30%;">SENT TO</th>
                 <th class="col">SENT BY</th>
                 <th class="col">TERMSHEET</th>
             </tr>
@@ -25,7 +25,7 @@
             @foreach($termsheets as $termsheet)
                 <tr class="align-middle">
                     <td>
-                        <div>{{ $termsheet->id }}</div>
+                        <div>{{ $termsheet->merchant_name }}</div>
                     </td>
                     <td>
                         <div>{{ $termsheet->first_name }}</div>
@@ -37,7 +37,7 @@
                         <div>{{ number_format( $termsheet->loan_amount) }}</div>
                     </td>
                     <td>
-                        <div>{{ $termsheet->created_at }}</div>
+                        <div>{{ $termsheet->created_at->format('m/d/Y') }}</div>
                     </td>
                     <td>
                         <div>{{ $termsheet->emails->pluck('email')->join(', ') }}</div>

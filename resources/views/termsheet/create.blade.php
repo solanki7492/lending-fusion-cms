@@ -47,42 +47,52 @@
             <div class="col-md-6 col-6">
                 <div class="mb-1">
                     <label class="form-label" for="loan-amount">Loan Amount:</label>
-                    <input type="text" class="form-control" name="loan_amount" id="loan-amount">
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" name="loan_amount" id="loan-amount">
+                    </div>
                     <span class="text-danger" id="loan-amount-error"></span>
                 </div>
             </div>
+
             <div class="col-md-6 col-6">
                 <div class="mb-1">
-                    <label class="form-label" for="origination-fee">Origination Fee:</label>
+                    <label class="form-label" for="origination-fee">Origination Fee(%):</label>
                     <input type="text" class="form-control" name="origination_fee" id="origination-fee-amount" value="1">
                 </div>
             </div>
             <div class="col-md-6 col-6">
                 <div class="mb-1">
                     <label class="form-label" for="net-loan-amount">Net Loan Amount:</label>
-                    <input type="text" class="form-control" name="net_loan_amount" id="net-loan-amount">
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" name="net_loan_amount" id="net-loan-amount">
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 col-6">
                 <div class="mb-1">
                     <label class="form-label" for="monthly-payment">Monthly Payment:</label>
-                    <input type="text" class="form-control" name="monthly_payment" id="monthly-payment">
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" name="monthly_payment" id="monthly-payment">
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 col-6">
                 <div class="mb-1">
-                    <label class="form-label" for="interest-rate">Interest Rate:</label>
+                    <label class="form-label" for="interest-rate">Interest Rate(%):</label>
                     <input type="text" class="form-control" name="interest_rate" id="interest-rate" value="12">
                 </div>
             </div>
             <div class="col-md-6 col-6">
-            <div class="mb-1">
-                <label class="form-label" for="loan-type-program-type">Loan Type and Program Type:</label>
-                <select class="form-select" name="loan_type_program_type" id="loan-type-program">
-                    <option value="Traditional" selected>Traditional</option>
-                    <option value="Line of Credit Revolving">Line of Credit Revolving</option>
-                </select>
-            </div>
+                <div class="mb-1">
+                    <label class="form-label" for="loan-type-program-type">Loan Type and Program Type:</label>
+                    <select class="form-select" name="loan_type_program_type" id="loan-type-program">
+                        <option value="Traditional" selected>Traditional</option>
+                        <option value="Line of Credit Revolving">Line of Credit Revolving</option>
+                    </select>
+                </div>
             </div>
             <div class="col-md-6 col-6">
                 <div class="mb-1">
@@ -100,6 +110,16 @@
                 <div class="mb-1 mt-1">
                     <label class="form-label" for="loan-type-program">Notes:</label>
                     <input type="text" class="form-control" name="notes" id="notes" >
+                </div>
+            </div>
+            <div class="col-md-6 col-6">
+                <div class="mb-1">
+                    <label class="form-label" for="mca_payment">MCA Payment:</label>
+                    <select class="form-select" name="mca_payment" id="mca_payment">
+                        <option value="two" selected>Two</option>
+                        <option value="three">Three</option>
+                        <option value="four">Four</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -120,7 +140,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary close-preview-pdf" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary savePdf">Submit</button>
+                    <button class="btn btn-primary savePdf" data="save">Save</button>
+                    <button class="btn btn-primary savePdf" data="send">Save & SendMail</button>
                 </div>
             </div>
         </div>
@@ -174,6 +195,13 @@
                     };
                 }
                 return null;
+            }
+        });
+
+        $('#loan-amount,#net-loan-amount,#monthly-payment').on('keyup', function () {
+            let val = $(this).val().replace(/,/g, ''); // remove existing commas
+            if (!isNaN(val) && val !== '') {
+            $(this).val(Number(val).toLocaleString()); // add commas
             }
         });
 
@@ -289,7 +317,13 @@
             $(document).on('click', '.savePdf', function() {
                 previewMode = false; // Set to false to allow normal submission
                 const form = document.getElementById('generatePdfForm');
+                const actionType = $(this).attr('data');
                 const formData = new FormData(form);
+                if (actionType === 'send') {
+                    formData.append('send_to_email', true);
+                } else {
+                    formData.append('send_to_email', false);
+                }
                 $.ajax({
                     url: "{{route('termsheet.store')}}",
                     method: form.method,

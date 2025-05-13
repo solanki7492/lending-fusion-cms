@@ -9,6 +9,8 @@ use App\Models\Termsheet;
 use Illuminate\Support\Facades\Http;
 use App\Models\TermsheetEmail;
 use App\Models\User;
+use App\Mail\TermsheetPDFMail;
+use Illuminate\Support\Facades\Mail;
 class TermsheetController extends Controller
 {
     public function index()
@@ -75,7 +77,7 @@ class TermsheetController extends Controller
         }
 
         // Save PDF in public folder
-        file_put_contents($fullPath, $pdfContent);
+        $pdfPath = file_put_contents($fullPath, $pdfContent);
 
         $termsheet = new Termsheet();
         $termsheet->user_id = auth()->user()->id;
@@ -102,7 +104,11 @@ class TermsheetController extends Controller
                 'termsheet_id' => $termsheet->id,
                 'email' => $email,
             ]);
+            if ($request->send_to_email) {
+                $mail = Mail::to($email)->send(new TermsheetPDFMail($pdfContent, $termsheet, $termsheet->termsheet));
+            }
         }
+        
 
         return response()->json([
             'success' => true,

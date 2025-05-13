@@ -6,9 +6,7 @@ use App\Http\Controllers\TermsheetController;
 use App\Http\Controllers\UserController;
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('home');
+    Route::get('/', [UserController::class ,'dashboard'])->name('dashboard');
     Route::get('/termsheet', [TermsheetController::class ,'index'])->name('termsheet');
     Route::get('/termsheet/create', [TermsheetController::class ,'create'])->name('termsheet.create');
     Route::post('/termsheet/generate-pdf', [TermsheetController::class ,'getGeneratePDF'])->name('termsheet.generate.pdf');
@@ -24,6 +22,8 @@ Route::middleware(['auth'])->group(function () {
         Route::Delete('/{user}/delete', [UserController::class, 'delete'])->name('users.destroy');
         
     });
+    Route::get('profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('profile/{user}/update', [UserController::class, 'updateProfile'])->name('profile.update');
 
 });
 

@@ -19,7 +19,7 @@
 <body>
 	<div style="margin-top:5px; margin-left: 10px; ">
 		<div>
-			<img src="{{public_path('/assets/images/Group-4.png')}}" height="40">
+			<img src="https://termsheets.lendingfusiongroup.com/images/Group-4.png" height="40">
 		</div>
 		<div style="margin-top:5px; font-size: smaller;">
 			<a href="https://lendingfusiongroup.com/" style="text-decoration: none; color: inherit;">https://lendingfusiongroup.com/</a>
@@ -79,7 +79,7 @@
 			<span style="font-family: 'Times New Roman';"><b>The subject business condition meets the lenders requirements. :</b> <u>X</u> Yes O No</span>
 		</div>
 		<div style="margin-top:25px;">
-			<span style="font-family: 'Times New Roman';">*Once the applicant has made two MCA payments, the loan will transition directly into a term loan, with the option to
+			<span style="font-family: 'Times New Roman';">*Once the applicant has made {{ $data['mca_payment'] }} MCA payments, the loan will transition directly into a term loan, with the option to
 			convert it into a line of credit if desired.</span>
 		</div>
 		<div style="margin-top:5px;">
@@ -89,7 +89,7 @@
 		<div style="margin-top:20px;">
 			<b>Documents Needed: </b><br>
 			<span style="margin-left:50px; font-family: 'Times New Roman';">1) AR and AP</span><br>
-			<span style="margin-left:50px; font-family: 'Times New Roman';">2) MCA contract with Two verified payments</span>
+			<span style="margin-left:50px; font-family: 'Times New Roman';">2) MCA contract with {{ $data['mca_payment'] }} verified payments</span>
 		</div>
 		<div style="margin-top:10px;">
 			<span style="font-family: 'Times New Roman';">Expedited Funding Date Before: {{ now()->addDays(45)->format('m/d/Y') }}</span>
