@@ -21,6 +21,7 @@
             </svg> Termsheet
             </a>
         </li>
+        @if(Auth::user()->role->name == 'ADMIN')
         <li class="nav-item">
             <a class="nav-link" href="{{route('users')}}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person m-1" viewBox="0 0 16 16">
@@ -28,6 +29,7 @@
             </svg> Users
             </a>
         </li>
+        @endif
       </ul>
       <div class="sidebar-footer border-top d-none d-md-flex">
         <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>

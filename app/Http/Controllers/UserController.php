@@ -14,7 +14,9 @@ class UserController extends Controller
     {
         // Fetch all users from the database
         $users = User::latest()->paginate(10);
-
+        if (auth()->user()->role_id === User::ROLE_SALES) {
+            return redirect()->route('termsheet');
+        }
         // Return the view with the users data
         return view('user.list', compact('users'));
     }
@@ -80,8 +82,12 @@ class UserController extends Controller
         $auth = auth()->user();
 
         if ($auth->role_id === User::ROLE_ADMIN) {
-            $termsheetSum = Termsheet::count();
-            return view('dashboard', compact('termsheetSum'));
+            $termsheets = Termsheet::groupBy('user_id')
+                ->selectRaw('user_id, COUNT(*) as termsheet_count')
+                ->with('user')
+                ->paginate(10);
+                
+            return view('dashboard', compact('termsheets'));
         }
 
         return redirect()->route('termsheet');

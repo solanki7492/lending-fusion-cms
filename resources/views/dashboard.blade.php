@@ -1,17 +1,39 @@
 @extends('layouts.app') {{-- Replace with your actual layout --}}
-@section('content')
 
-<div class="col-sm-6 col-xl-4">
-        <div class="card text-white bg-primary">
-        <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-            <div>
-                <div class="fs-4 fw-semibold">Termsheet Counts</div>
-                <h4>{{$termsheetSum}}</h4>
-            </div>
-        </div>
-        <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-            <canvas class="chart" id="card-chart1" height="70"></canvas>
-        </div>
+@section('content')
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3>Termsheet Count</h3>
+    </div>
+    
+    <div class="tab-pane p-3 active preview">
+        <table class="table  table-striped">
+            <thead>
+            <tr class="align-middle">
+                <th class="col">User Name</th>
+                <th class="col">Email</th>
+                <th class="col">Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($termsheets as $termsheet)
+                <tr class="align-middle">
+                    <td>
+                        <div>{{ $termsheet->user->name }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $termsheet->user->email }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $termsheet->termsheet_count }}</div>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+            {{ $termsheets->links('pagination::bootstrap-4') }}
         </div>
     </div>
+</div>
 @endsection
