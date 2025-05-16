@@ -124,7 +124,7 @@
             </div>
         </div>
         <div class="col-12">
-            <button  class="btn btn-primary mt-3" onclick="setPreviewMode()">Submit</button>
+            <button  class="btn btn-primary mt-3" onclick="setPreviewMode()">Create</button>
         </div>
     </form>
     
