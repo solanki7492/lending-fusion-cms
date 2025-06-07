@@ -43,7 +43,8 @@ class TermsheetController extends Controller
         
         $data = $request->all();
         $pdf = DomPDF::loadView('termsheet.generate-pdf', compact('data'));
-        
+        $data = view('termsheet.generate-pdf', compact('data'))->render();
+       
         // Generate file name
         $fileName = Str::slug($request->merchant_name, '-') . '-contract' . time() . '.pdf';
         
@@ -57,14 +58,13 @@ class TermsheetController extends Controller
         
         // Save the file directly to public/
         file_put_contents($publicPath, $pdf->output());
-        
         // Return URL
-        return response()->json(asset("termsheets/{$fileName}"));
+        return response()->json(['path' => asset("termsheets/{$fileName}"), 'html' => $data]);
     }
     public function store(Request $request)
     {
         $data = $request->all();
-        $pdf = DomPDF::loadView('termsheet.generate-pdf', compact('data'));
+        $pdf = DomPDF::loadHTML($request->editor_content);
 
         $pdfContent = $pdf->output();
         $fileName = Str::slug($request->merchant_name, '-') . '-contract' . time() . '.pdf';

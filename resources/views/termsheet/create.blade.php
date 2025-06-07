@@ -128,15 +128,16 @@
         </div>
     </form>
     
+    <!-- Modal HTML -->
     <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl" style="max-width:90%">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">PDF Preview</h5>
-                    <button type="button" class="btn-close close-preview-pdf" data-bs-dismiss="pdfPreviewModal"></button>
+                    <button type="button" class="btn-close close-preview-pdf" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <iframe name="pdf-frame" id="pdf-frame" width="100%" height="600px" style="display: none; border: none;"></iframe>
+                    <div id="editor"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary close-preview-pdf" data-bs-dismiss="modal">Close</button>
@@ -146,11 +147,54 @@
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
     
     <script type="text/javascript">
+        
+    let quill;
+
+    $(document).on('click', '.savePdf', function() {
+        const actionType = $(this).attr('data');
+        const form = document.getElementById('generatePdfForm');
+        const formData = new FormData(form);
+        
+
+        // Get updated HTML from Quill editor
+        const editorContent = quill ? quill.root.innerHTML : $('#editor').html();
+
+        formData.append('editor_content', editorContent);
+        formData.append('send_to_email', actionType === 'send');
+        formData.append('_token', '{{ csrf_token() }}');
+
+        // Debug: Log formData
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
+        $.ajax({
+            url: "{{ route('termsheet.store') }}",
+            method: 'post',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('Termsheet saved successfully!');
+                $('#pdfPreviewModal').modal('hide');
+                window.location.href = "{{ route('termsheet') }}";
+            },
+            error: function(xhr) {
+                alert('An error occurred while saving the PDF.');
+            }
+        });
+    });
+    
+
         var leads = [];
         $('#merchant-name').select2({
             placeholder: "Select Merchant",
@@ -291,6 +335,7 @@
                 const form = this;
                 const formData = new FormData(form);
 
+
                 $.ajax({
                     url: form.getAttribute('action'), // Use the action attribute from the form
                     method: form.method,
@@ -298,10 +343,19 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
+                        
                         $('#pdfPreviewModal').modal('show');
-                        const pdfFrame = document.getElementById('pdf-frame');
-                        pdfFrame.style.display = 'block';
-                        pdfFrame.src = response;
+                        $('#editor').html(''); // Clear previous content
+                        $('#editor').html(response.html); // Load new HTML content
+
+                        // Re-initialize Quill each time with new content
+                        if (quill) {
+                            quill.root.innerHTML = response.html;
+                        } else {
+                            quill = new Quill('#editor', {
+                                theme: 'snow'
+                            });
+                        }
                     },
                     error: function(xhr) {
                         $('#merchant-name-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.merchant_name || '' : '');
@@ -314,31 +368,5 @@
                 });
             });
 
-            $(document).on('click', '.savePdf', function() {
-                previewMode = false; // Set to false to allow normal submission
-                const form = document.getElementById('generatePdfForm');
-                const actionType = $(this).attr('data');
-                const formData = new FormData(form);
-                if (actionType === 'send') {
-                    formData.append('send_to_email', true);
-                } else {
-                    formData.append('send_to_email', false);
-                }
-                $.ajax({
-                    url: "{{route('termsheet.store')}}",
-                    method: form.method,
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        alert('Termsheet saved successfully!');
-                        $('#pdfPreviewModal').modal('hide');
-                        window.location.href = "{{ route('termsheet') }}";
-                    },
-                    error: function(xhr) {
-                        alert('An error occurred while saving the PDF.');
-                    }
-                });
-            });
     </script>
 @endsection
