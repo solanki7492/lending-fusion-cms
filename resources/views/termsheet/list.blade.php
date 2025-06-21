@@ -34,7 +34,7 @@
                         <div>{{ $termsheet->last_name }}</div>
                     </td>
                     <td>
-                        <div>{{ number_format( $termsheet->loan_amount) }}</div>
+                        <div>{{ number_format($termsheet->loan_amount) }}</div>
                     </td>
                     <td>
                         <div>{{ $termsheet->created_at->format('m/d/Y') }}</div>

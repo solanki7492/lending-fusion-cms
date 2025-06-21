@@ -11,8 +11,6 @@
                     <label class="form-label" for="merchant-name">Merchant Name</label>
                     <select class="form-select" name="merchant_name" id="merchant-name">
                         <option value="" selected disabled>Select Merchant</option>
-                        <option value="Merchant 1">Merchant 1</option>
-                        <option value="Merchant 2">Merchant 2</option>
                     </select>
                     <span class="text-danger" id="merchant-name-error"></span>
                 </div>
@@ -36,6 +34,7 @@
                     <label class="form-label" for="address">Address:</label>
                     <input type="text" class="form-control" name="address" id="address">
                 </div>
+                <span class="text-danger" id="address-error"></span>
             </div>
             <div class="col-md-6 col-6 lead-email">
                 <div class="mb-1">
@@ -163,7 +162,6 @@
         const actionType = $(this).attr('data');
         const form = document.getElementById('generatePdfForm');
         const formData = new FormData(form);
-        
 
         // Get updated HTML from Quill editor
         const editorContent = quill ? quill.root.innerHTML : $('#editor').html();
@@ -171,11 +169,6 @@
         formData.append('editor_content', editorContent);
         formData.append('send_to_email', actionType === 'send');
         formData.append('_token', '{{ csrf_token() }}');
-
-        // Debug: Log formData
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
 
         $.ajax({
             url: "{{ route('termsheet.store') }}",
@@ -199,6 +192,15 @@
         $('#merchant-name').select2({
             placeholder: "Select Merchant",
             allowClear: true,
+            tags: true,
+            createTag: function (params) {
+                return {
+                    id: params.term,
+                    text: params.term,
+                    newOption: true
+                };
+            },
+
             ajax: {
                 url: '{{ route("lead.search") }}',
                 dataType: 'json',
@@ -363,6 +365,7 @@
                         $('#last-name-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.last_name || '' : '');
                         $('#email-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.email || '' : '');
                         $('#loan-amount-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.loan_amount || '' : '');
+                        $('#address-error').text(xhr.responseJSON && xhr.responseJSON.errors ? xhr.responseJSON.errors.address || '' : '');
                         
                     }
                 });

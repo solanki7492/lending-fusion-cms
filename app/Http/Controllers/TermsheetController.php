@@ -38,7 +38,7 @@ class TermsheetController extends Controller
             'last_name' => 'required',
             'address' => 'required',
             'email.*' => 'required|email',
-            'loan_amount' => 'required|numeric',
+            'loan_amount' => 'required',
         ]);
         
         $data = $request->all();
@@ -86,7 +86,7 @@ class TermsheetController extends Controller
         $termsheet->last_name = $request->last_name;
         $termsheet->address = $request->address;
         $termsheet->termsheet = $filePath;
-        $termsheet->loan_amount = $request->loan_amount;
+        $termsheet->loan_amount = preg_replace('/[^\d]/', '', $request->loan_amount);
         $termsheet->origination_fee = $request->origination_fee;
         $termsheet->net_loan_amount = $request->net_loan_amount;
         $termsheet->monthly_payment = $request->monthly_payment;
