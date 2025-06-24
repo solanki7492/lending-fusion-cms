@@ -10,7 +10,7 @@
 <body>
     <div style="font-size: large; font-family:sans-serif;">
         <p>
-        <img src="{{ asset('/images/Group-4.png') }}" width="500" alt="Company Logo" />
+        <img src="{{ asset('/images/congratulation_approved.png') }}" width="500" alt="Company Logo" />
 
         </p>
         <p style="text-align: left;">Dear {{$name}},</p>
